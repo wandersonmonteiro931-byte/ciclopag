@@ -1,21 +1,27 @@
-# CicloPag V3
+# CicloPag V5
 
 **O ciclo completo da sua empresa.**
 
-Versão com autenticação, banco multiempresa, onboarding de primeiro acesso, tour guiado, interface ERP e cadastro de clientes.
+ERP multiempresa em React + TypeScript + Vite, Supabase e Cloudflare Pages.
+
+## V5
+
+- Onboarding profissional e tour de primeiro acesso.
+- Interface ERP padronizada.
+- Cadastros, itens, orçamentos, vendas, PDV, O.S., estoque, compras, financeiro, contratos, agenda, fiscal, relatórios, Área do Cliente, integrações, contabilidade e loja virtual.
+- Formulários orientados por catálogo com abas, seções, itens dinâmicos, anexos e histórico.
+- Grupos de usuários, matriz de permissões e convites de acesso.
+- Menu, botões e RLS condicionados às permissões reais.
 
 ## Implantação
 
-1. Execute `PASSO_2_SUPABASE.sql` apenas se a base V2 ainda não existir.
-2. Execute `PASSO_3_SUPABASE_ONBOARDING.sql`.
-3. Desative a confirmação obrigatória de e-mail no provedor de autenticação.
-4. Execute `ENVIAR_CICLOPAG_GITHUB.bat`.
+1. Execute `PASSO_5_SUPABASE_PERMISSOES_COMPLETO.sql` no Supabase.
+2. Execute `ENVIAR_CICLOPAG_GITHUB.bat`.
+3. Acesse `https://ciclopag.pages.dev/app`.
 
-Produção: `https://ciclopag.pages.dev/`
-Sistema: `https://ciclopag.pages.dev/app`
+## Build
 
-## Versão 0.4.0 — padrão operacional
-
-A V4 padroniza todas as seções do ERP com barra de ações, pesquisa, tabelas,
-formulários em painéis, abas e salvamento multiempresa no Supabase. Antes do
-deploy, execute `PASSO_4_SUPABASE_OPERACIONAL.sql`.
+```bash
+npm ci
+npm run build
+```

@@ -1,0 +1,24 @@
+CICLOPAG V5 - VERIFICACAO TECNICA
+
+Versao: 0.5.0
+Data: 13/07/2026
+Node validado: 22.16.0
+
+Validacoes executadas em pasta limpa:
+- npm ci --progress=false
+- npm run typecheck
+- npm run build
+- vite preview e resposta HTTP 200
+- conferencia de todos os IDs do menu contra o catalogo de modulos
+- conferencia de ausencia de URLs privadas no package-lock
+
+Resultado:
+- TypeScript: sem erros
+- Vite: build de producao concluida
+- Cloudflare Pages: comando npm run build, saida dist
+- Registro npm: https://registry.npmjs.org/
+- node_modules e dist nao incluidos no ZIP
+
+Banco:
+- PASSO_5_SUPABASE_PERMISSOES_COMPLETO.sql para atualizar a instalacao atual
+- SUPABASE_COMPLETO_NOVA_INSTALACAO_V5.sql para uma instalacao nova

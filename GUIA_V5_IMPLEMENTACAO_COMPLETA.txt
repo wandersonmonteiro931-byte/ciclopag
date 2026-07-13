@@ -1,0 +1,43 @@
+CICLOPAG V5 - ERP, GRUPOS DE USUARIOS E PERMISSOES
+
+ORDEM DE INSTALACAO
+
+1. No Supabase, abra SQL Editor -> New query.
+2. Execute PASSO_5_SUPABASE_PERMISSOES_COMPLETO.sql inteiro.
+3. Resultado esperado: Success. No rows returned.
+4. Extraia o ZIP completo em uma pasta nova.
+5. Execute ENVIAR_CICLOPAG_GITHUB.bat.
+6. Aguarde o deploy automatico da Cloudflare.
+7. Acesse https://ciclopag.pages.dev/app
+
+BANCO NOVO
+- grupos_usuarios
+- grupo_permissoes
+- convites_acesso
+- acoes_erp
+- catalogo_modulos_erp
+- bucket privado erp-anexos com limite de 5 MB
+
+GRUPOS PADRAO
+- Administracao: acesso completo.
+- Vendedor: clientes, orcamentos, vendas, O.S., atendimentos, agenda, produtos e servicos conforme permissoes iniciais.
+
+FLUXO DE ACESSO
+- Em Funcionarios, marque Permitir acesso ao sistema.
+- Selecione o Grupo de acesso.
+- Salve o funcionario.
+- Copie o link de convite gerado.
+- O funcionario abre o link, cria a senha e entra automaticamente na empresa e no grupo selecionado.
+
+FUNCOES OPERACIONAIS
+- Cadastrar, visualizar, editar, copiar e excluir.
+- Busca simples e avancada.
+- Selecao em massa e exportacao CSV.
+- Impressao.
+- Anexos privados de ate 5 MB.
+- Historico de acoes.
+- Menu e botoes filtrados por permissao.
+- RLS no Supabase valida as mesmas permissoes no banco.
+
+INTEGRACOES EXTERNAS
+Os botoes e o historico estao preparados. Emissao fiscal, bancos, gateways, marketplaces, assinatura digital e envio transacional dependem das credenciais e homologacoes de cada fornecedor. Nenhuma chave privada foi incluinda no frontend.

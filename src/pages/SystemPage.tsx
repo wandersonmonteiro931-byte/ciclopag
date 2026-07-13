@@ -4,8 +4,10 @@ import type { Session } from '@supabase/supabase-js'
 import FirstAccessTour from '../components/FirstAccessTour'
 import OnboardingWizard from '../components/OnboardingWizard'
 import { erpMenu, pageTitles } from '../data/erpMenu'
-import { getOperationalPageInfo } from '../data/operationalPages'
-import { OperationalModule } from './OperationalModule'
+import { getModuleDefinition, parseOperationalPage } from '../data/erpCatalog'
+import { OperationalModuleV5 } from './OperationalModuleV5'
+import { AccessManagement, isAccessPage } from './AccessManagement'
+import { createAccessControl, type AccessControl, type PermissionRow } from '../lib/permissions'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 
 type Empresa = {
@@ -20,6 +22,7 @@ type Empresa = {
 type Workspace = {
   empresa: Empresa
   papel: string
+  grupo_usuario_id: string | null
 }
 
 type Cliente = {
@@ -146,6 +149,35 @@ function AuthPanel({ onReady }: AuthPanelProps) {
   const [terms, setTerms] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [inviteToken] = useState(() => new URLSearchParams(window.location.search).get('convite') ?? '')
+  const [inviteCompany, setInviteCompany] = useState('')
+
+  useEffect(() => {
+    if (!client || !inviteToken) return
+    client.rpc('consultar_convite_acesso', { p_token: inviteToken }).then(({ data, error: inviteError }) => {
+      if (inviteError) {
+        setError(friendlyError(inviteError.message))
+        return
+      }
+      const row = Array.isArray(data) ? data[0] : data
+      if (!row) {
+        setError('Este convite é inválido, expirou ou já foi utilizado.')
+        return
+      }
+      setMode('signup')
+      setEmail(String(row.email ?? ''))
+      setName(String(row.nome ?? ''))
+      setInviteCompany(String(row.empresa_nome ?? ''))
+      setCompany(String(row.empresa_nome ?? ''))
+    })
+  }, [client, inviteToken])
+
+  async function acceptInvite() {
+    if (!client || !inviteToken) return
+    const result = await client.rpc('aceitar_convite_acesso', { p_token: inviteToken })
+    if (result.error) throw result.error
+    window.history.replaceState({}, document.title, '/app')
+  }
 
   async function createInitialCompany(companyName: string) {
     if (!client) return
@@ -175,10 +207,13 @@ function AuthPanel({ onReady }: AuthPanelProps) {
           password,
         })
         if (loginError) throw loginError
-        if (data.session) await onReady(data.session)
+        if (data.session) {
+          await acceptInvite()
+          await onReady(data.session)
+        }
       } else {
         if (name.trim().length < 2) throw new Error('Informe o nome completo do responsável.')
-        if (company.trim().length < 2) throw new Error('Informe o nome da empresa.')
+        if (!inviteToken && company.trim().length < 2) throw new Error('Informe o nome da empresa.')
         if (password !== confirmPassword) throw new Error('As senhas digitadas não são iguais.')
         if (!terms) throw new Error('Aceite os Termos de Uso para continuar.')
 
@@ -189,7 +224,7 @@ function AuthPanel({ onReady }: AuthPanelProps) {
             data: {
               nome: name.trim(),
               whatsapp: whatsapp.trim(),
-              empresa_nome: company.trim(),
+              empresa_nome: inviteToken ? inviteCompany : company.trim(),
             },
           },
         })
@@ -198,7 +233,8 @@ function AuthPanel({ onReady }: AuthPanelProps) {
           throw new Error('A entrada automática está desativada. Desative a confirmação obrigatória de e-mail e tente novamente.')
         }
 
-        await createInitialCompany(company.trim())
+        if (inviteToken) await acceptInvite()
+        else await createInitialCompany(company.trim())
         await onReady(data.session)
       }
     } catch (caught) {
@@ -224,8 +260,8 @@ function AuthPanel({ onReady }: AuthPanelProps) {
         <form className={`auth-card v3-auth-card ${mode === 'signup' ? 'signup' : ''}`} onSubmit={submit}>
           <div className="auth-heading">
             <span className="eyebrow">CicloPag</span>
-            <h2>{mode === 'login' ? 'Entrar no sistema' : 'Criar minha empresa'}</h2>
-            <p>{mode === 'login' ? 'Acesse o painel de gestão.' : 'O acesso é liberado imediatamente após o cadastro.'}</p>
+            <h2>{mode === 'login' ? 'Entrar no sistema' : inviteToken ? 'Aceitar convite de acesso' : 'Criar minha empresa'}</h2>
+            <p>{mode === 'login' ? 'Acesse o painel de gestão.' : inviteToken ? `Você foi convidado para ${inviteCompany || 'uma empresa no CicloPag'}.` : 'O acesso é liberado imediatamente após o cadastro.'}</p>
           </div>
 
           {mode === 'signup' && (
@@ -238,10 +274,17 @@ function AuthPanel({ onReady }: AuthPanelProps) {
                 WhatsApp
                 <input value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} autoComplete="tel" placeholder="(62) 99999-9999" />
               </label>
-              <label className="auth-field-full">
-                Nome da empresa
-                <input value={company} onChange={(event) => setCompany(event.target.value)} required placeholder="Nome fantasia da empresa" />
-              </label>
+              {inviteToken ? (
+                <label className="auth-field-full">
+                  Empresa do convite
+                  <input value={inviteCompany} readOnly />
+                </label>
+              ) : (
+                <label className="auth-field-full">
+                  Nome da empresa
+                  <input value={company} onChange={(event) => setCompany(event.target.value)} required placeholder="Nome fantasia da empresa" />
+                </label>
+              )}
             </div>
           )}
 
@@ -445,10 +488,38 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
   const [preferences, setPreferences] = useState<Preferences | null>(null)
   const [welcomeOpen, setWelcomeOpen] = useState(false)
   const [tourActive, setTourActive] = useState(false)
+  const [access, setAccess] = useState<AccessControl>(() => createAccessControl(workspace.papel, []))
 
   const userName = String(session.user.user_metadata?.nome || session.user.email?.split('@')[0] || 'Usuário')
   const firstName = userName.trim().split(/\s+/)[0]
-  const currentPage = getOperationalPageInfo(activePage) ?? pageTitles[activePage] ?? { title: activePage.replace(/-/g, ' '), section: 'CicloPag' }
+  const parsedPage = parseOperationalPage(activePage)
+  const activeDefinition = getModuleDefinition(parsedPage.moduleId)
+  const accessTitle = activePage === 'usuarios-adicionar' ? { title: 'Adicionar usuário', section: 'Usuários' }
+    : activePage === 'usuarios' ? { title: 'Usuários', section: 'Configurações' }
+    : activePage === 'grupos-usuarios-adicionar' ? { title: 'Adicionar grupo de usuários', section: 'Grupos de usuários' }
+    : activePage.startsWith('grupos-usuarios-permissoes:') ? { title: 'Permissões do grupo', section: 'Grupos de usuários' }
+    : activePage.startsWith('grupos-usuarios-editar:') ? { title: 'Editar grupo de usuários', section: 'Grupos de usuários' }
+    : activePage.startsWith('grupos-usuarios-visualizar:') ? { title: 'Visualizar grupo de usuários', section: 'Grupos de usuários' }
+    : null
+  const currentPage = accessTitle ?? (activeDefinition ? {
+    title: parsedPage.mode === 'create' ? `Adicionar ${activeDefinition.singular}` : parsedPage.mode === 'edit' ? `Editar ${activeDefinition.singular}` : parsedPage.mode === 'view' ? `Visualizar ${activeDefinition.singular}` : activeDefinition.title,
+    section: activeDefinition.section,
+  } : pageTitles[parsedPage.moduleId] ?? { title: parsedPage.moduleId.replace(/-/g, ' '), section: 'CicloPag' })
+
+  async function loadAccess() {
+    if (!client) return
+    if (['proprietario', 'administrador'].includes(workspace.papel)) {
+      setAccess(createAccessControl(workspace.papel, []))
+      return
+    }
+    const result = await client.rpc('minhas_permissoes', { p_empresa_id: workspace.empresa.id })
+    if (result.error) {
+      setError(friendlyError(result.error.message))
+      setAccess(createAccessControl(workspace.papel, []))
+      return
+    }
+    setAccess(createAccessControl(workspace.papel, (result.data ?? []) as PermissionRow[]))
+  }
 
   async function loadPreferences() {
     if (!client) return
@@ -460,7 +531,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
 
     if (preferenceError) {
       if (preferenceError.message.toLowerCase().includes('does not exist')) {
-        setError('Execute o arquivo PASSO_3_SUPABASE_ONBOARDING.sql para ativar o primeiro acesso completo.')
+        setError('Execute o arquivo PASSO_5_SUPABASE_PERMISSOES_COMPLETO.sql para ativar o primeiro acesso completo.')
       }
       return
     }
@@ -501,43 +572,82 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
     const sixKeys = makeSixMonthKeys()
     const sixStartDate = `${sixKeys[0]}-01`
 
-    const [clientsResult, todayReceivables, monthReceivables, monthPayments, sixMonthPayments] = await Promise.all([
+    const [clientsResult, legacyReceivables, legacyPayments, operationalResult] = await Promise.all([
       client.from('clientes').select('id,nome,email,telefone,status,criado_em').eq('empresa_id', companyId).order('criado_em', { ascending: false }).limit(80),
-      client.from('mensalidades').select('valor,status,vencimento').eq('empresa_id', companyId).eq('vencimento', today).in('status', ['pendente', 'vencida', 'parcial']),
-      client.from('mensalidades').select('valor,status,vencimento').eq('empresa_id', companyId).gte('vencimento', start).lt('vencimento', nextStart).neq('status', 'cancelada'),
-      client.from('pagamentos').select('valor,status,pago_em,criado_em').eq('empresa_id', companyId).eq('status', 'confirmado').gte('criado_em', `${start}T00:00:00`).lt('criado_em', `${nextStart}T00:00:00`),
+      client.from('mensalidades').select('valor,status,vencimento').eq('empresa_id', companyId).gte('vencimento', sixStartDate).neq('status', 'cancelada'),
       client.from('pagamentos').select('valor,status,pago_em,criado_em').eq('empresa_id', companyId).eq('status', 'confirmado').gte('criado_em', `${sixStartDate}T00:00:00`),
+      client.from('registros_erp').select('modulo,status,valor_total,dados,criado_em').eq('empresa_id', companyId).in('modulo', ['contas-receber','contas-pagar','vendas-produtos','vendas-servicos','vendas-balcao']),
     ])
 
-    const firstError = [clientsResult.error, todayReceivables.error, monthReceivables.error, monthPayments.error, sixMonthPayments.error].find(Boolean)
+    const firstError = [clientsResult.error, legacyReceivables.error, legacyPayments.error, operationalResult.error].find(Boolean)
     if (firstError) {
       setError(friendlyError(firstError.message))
       setLoading(false)
       return
     }
 
-    const monthlyValues = Object.fromEntries(sixKeys.map((key) => [key, 0])) as Record<string, number>
-    for (const row of sixMonthPayments.data ?? []) {
+    type OperationalDashboardRow = { modulo: string; status: string; valor_total: number | string | null; dados: unknown; criado_em: string }
+    const operationalRows = (operationalResult.data ?? []) as OperationalDashboardRow[]
+    const financialValues = (row: OperationalDashboardRow) => {
+      const data = row.dados && typeof row.dados === 'object' ? row.dados as Record<string, unknown> : {}
+      const values = data.values && typeof data.values === 'object' ? data.values as Record<string, unknown> : data
+      return values
+    }
+
+    const monthlySales = Object.fromEntries(sixKeys.map((key) => [key, 0])) as Record<string, number>
+    for (const row of legacyPayments.data ?? []) {
       const rawDate = row.pago_em || row.criado_em
       if (!rawDate) continue
       const key = monthKey(new Date(rawDate))
-      if (key in monthlyValues) monthlyValues[key] += numberValue(row.valor)
+      if (key in monthlySales) monthlySales[key] += numberValue(row.valor)
+    }
+    for (const row of operationalRows.filter((item) => ['vendas-produtos','vendas-servicos','vendas-balcao'].includes(item.modulo) && !item.status.toLowerCase().includes('cancel'))) {
+      const key = monthKey(new Date(row.criado_em))
+      if (key in monthlySales) monthlySales[key] += numberValue(row.valor_total)
     }
 
-    const expectedMonth = (monthReceivables.data ?? []).reduce((total, row) => total + numberValue(row.valor), 0)
-    const receivedMonth = (monthPayments.data ?? []).reduce((total, row) => total + numberValue(row.valor), 0)
-    const sales = sixKeys.map((key) => monthlyValues[key] ?? 0)
+    let receivableToday = (legacyReceivables.data ?? []).filter((row) => row.vencimento === today && ['pendente','vencida','parcial'].includes(row.status)).reduce((sum, row) => sum + numberValue(row.valor), 0)
+    let expectedMonth = (legacyReceivables.data ?? []).filter((row) => row.vencimento >= start && row.vencimento < nextStart).reduce((sum, row) => sum + numberValue(row.valor), 0)
+    let receivedMonth = (legacyPayments.data ?? []).filter((row) => {
+      const date = String(row.pago_em || row.criado_em || '').slice(0, 10)
+      return date >= start && date < nextStart
+    }).reduce((sum, row) => sum + numberValue(row.valor), 0)
+    let payableToday = 0
+    let expectedPaymentsMonth = 0
+    let paidMonth = 0
+
+    for (const row of operationalRows.filter((item) => item.modulo === 'contas-receber' || item.modulo === 'contas-pagar')) {
+      const values = financialValues(row)
+      const due = String(values.vencimento ?? '')
+      const amount = numberValue(row.valor_total) || numberValue(values.valor)
+      const normalizedStatus = row.status.toLowerCase()
+      const isPaid = normalizedStatus.includes('pago') || normalizedStatus.includes('recebido') || normalizedStatus.includes('quitado')
+      const isCancelled = normalizedStatus.includes('cancel')
+      const inMonth = due >= start && due < nextStart
+      if (row.modulo === 'contas-receber') {
+        if (!isPaid && !isCancelled && due === today) receivableToday += amount
+        if (!isCancelled && inMonth) expectedMonth += amount
+        if (isPaid && inMonth) receivedMonth += amount
+      } else {
+        if (!isPaid && !isCancelled && due === today) payableToday += amount
+        if (!isCancelled && inMonth) expectedPaymentsMonth += amount
+        if (isPaid && inMonth) paidMonth += amount
+      }
+    }
+
+    const sales = sixKeys.map((key) => monthlySales[key] ?? 0)
+    const cashFlow = sales.map((value, index) => value - (index === sales.length - 1 ? paidMonth : 0))
 
     setData({
       clients: (clientsResult.data ?? []) as Cliente[],
       clientCount: clientsResult.data?.length ?? 0,
-      receivableToday: (todayReceivables.data ?? []).reduce((total, row) => total + numberValue(row.valor), 0),
-      payableToday: 0,
+      receivableToday,
+      payableToday,
       receivedMonth,
       expectedMonth,
-      paidMonth: 0,
-      expectedPaymentsMonth: 0,
-      cashFlow: sales,
+      paidMonth,
+      expectedPaymentsMonth,
+      cashFlow,
       sales,
       months: monthLabels(),
     })
@@ -545,7 +655,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
   }
 
   useEffect(() => {
-    void Promise.all([loadDashboard(), loadPreferences()])
+    void Promise.all([loadDashboard(), loadPreferences(), loadAccess()])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace.empresa.id, session.user.id])
 
@@ -606,7 +716,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
         </div>
         <button className="company-selector" type="button"><strong>Matriz</strong><span>⌄</span></button>
         <nav className="erp-menu" aria-label="Menu principal">
-          {erpMenu.map((item) => {
+          {erpMenu.filter((item) => !item.children ? access.can(item.moduleId ?? item.id, 'visualizar') : item.children.some((child) => access.can(child.moduleId ?? child.id, 'visualizar'))).map((item) => {
             const expanded = expandedMenus.includes(item.id)
             const active = activePage === item.id || item.children?.some((child) => child.id === activePage)
             return (
@@ -622,7 +732,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
                 </button>
                 {item.children && expanded && (
                   <div className="erp-submenu">
-                    {item.children.map((child) => (
+                    {item.children.filter((child) => access.can(child.moduleId ?? child.id, 'visualizar')).map((child) => (
                       <button className={activePage === child.id ? 'active' : ''} key={child.id} onClick={() => navigate(child.id)} type="button">{child.label}</button>
                     ))}
                   </div>
@@ -695,14 +805,25 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
             </section>
           </>
         ) : (
-          <OperationalModule
-            pageId={activePage}
-            companyId={workspace.empresa.id}
-            session={session}
-            userName={userName}
-            navigate={navigate}
-            onDataChanged={loadDashboard}
-          />
+          isAccessPage(activePage) ? (
+            <AccessManagement
+              pageId={activePage}
+              companyId={workspace.empresa.id}
+              session={session}
+              access={access}
+              navigate={navigate}
+            />
+          ) : (
+            <OperationalModuleV5
+              pageId={activePage}
+              companyId={workspace.empresa.id}
+              session={session}
+              userName={userName}
+              access={access}
+              navigate={navigate}
+              onDataChanged={loadDashboard}
+            />
+          )
         )}
       </main>
 
@@ -752,7 +873,7 @@ export default function SystemPage() {
 
     const { data, error: queryError } = await client
       .from('membros_empresa')
-      .select('empresa_id,papel,empresas(id,nome,slug,status,segmento,onboarding_concluido)')
+      .select('empresa_id,papel,grupo_usuario_id,empresas(id,nome,slug,status,segmento,onboarding_concluido)')
       .eq('usuario_id', currentSession.user.id)
       .eq('ativo', true)
       .limit(1)
@@ -781,7 +902,7 @@ export default function SystemPage() {
       return
     }
 
-    setWorkspace({ empresa: company, papel: (data as { papel: string }).papel })
+    setWorkspace({ empresa: company, papel: (data as { papel: string }).papel, grupo_usuario_id: (data as { grupo_usuario_id: string | null }).grupo_usuario_id ?? null })
     setLoading(false)
   }
 
@@ -826,7 +947,7 @@ export default function SystemPage() {
     return (
       <div className="simple-page">
         <Brand />
-        <div className="simple-card"><span className="eyebrow">Atualização necessária</span><h1>Execute o SQL da V3</h1><p>Abra o SQL Editor e execute o arquivo <strong>PASSO_3_SUPABASE_ONBOARDING.sql</strong> incluído no pacote.</p><button className="button" onClick={() => void loadWorkspace(session)}>Verificar novamente</button></div>
+        <div className="simple-card"><span className="eyebrow">Atualização necessária</span><h1>Execute o SQL da V5</h1><p>Abra o SQL Editor e execute o arquivo <strong>PASSO_5_SUPABASE_PERMISSOES_COMPLETO.sql</strong> incluído no pacote.</p><button className="button" onClick={() => void loadWorkspace(session)}>Verificar novamente</button></div>
       </div>
     )
   }

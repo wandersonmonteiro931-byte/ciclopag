@@ -1,0 +1,1420 @@
+1. Cadastros
+Clientes
+
+Dados gerais
+
+Tipo de pessoa: Física ou Jurídica
+Nome ou razão social
+Nome fantasia
+CPF ou CNPJ
+RG
+Inscrição estadual
+Inscrição municipal
+Data de nascimento
+Sexo
+Situação: Ativo ou Inativo
+Observações gerais
+
+Endereços
+
+Tipo de endereço
+CEP
+Logradouro
+Número
+Complemento
+Bairro
+Cidade
+Estado
+Possibilidade de cadastrar vários endereços
+
+Contatos
+
+Tipo de contato
+Telefone
+Celular
+WhatsApp
+E-mail
+Nome do contato
+Responsável
+Cargo ou função
+Observações do contato
+Possibilidade de cadastrar vários contatos
+
+Financeiro
+
+Limite de crédito
+Permitir ultrapassar o limite de crédito
+Dados financeiros vinculados ao cliente
+
+Outras abas
+
+Foto
+Anexos
+Observações
+Histórico de operações relacionadas ao cliente
+
+Funcionalidades
+
+Cadastrar, visualizar, editar e excluir
+Pesquisar e filtrar clientes
+Ativar ou inativar
+Importar clientes por planilha
+Importar por XML
+Vincular vendas, contratos, atendimentos, agendamentos e contas
+Liberar acesso à Área do Cliente
+Enviar convite de acesso por e-mail.
+Fornecedores
+
+Dados gerais
+
+Tipo de pessoa
+Nome ou razão social
+Nome fantasia
+CPF ou CNPJ
+RG
+Inscrição estadual
+Situação
+
+Endereço
+
+CEP
+Logradouro
+Número
+Complemento
+Bairro
+Cidade
+Estado
+Vários endereços
+
+Contatos
+
+Telefone
+Celular
+WhatsApp
+E-mail
+Nome do contato
+Cargo
+Observações
+
+Outros
+
+Anexos de até 5 MB
+Observações
+Produtos vinculados
+Compras vinculadas
+
+Funcionalidades
+
+Cadastrar, editar, visualizar e excluir
+Importar fornecedores por planilha
+Vincular fornecedor a produtos
+Utilizar em compras, cotações, contas a pagar e notas fiscais.
+Funcionários
+
+Dados gerais
+
+Nome
+CPF
+RG
+Data de nascimento
+Sexo
+Percentual de comissão
+E-mail
+Observações
+Permitir acesso ao sistema
+
+Outras abas
+
+Foto
+Contatos
+Endereço
+Anexos
+
+Funcionalidades
+
+Cadastrar e editar funcionários
+Definir comissão
+Criar acesso de usuário
+Vincular a vendas, atendimentos, agenda e relatórios
+Emitir relatório de funcionários.
+Transportadoras
+
+Dados gerais
+
+Tipo de transportadora
+Nome
+E-mail
+Telefone
+Celular
+
+Endereço
+
+CEP
+Logradouro
+Bairro
+Cidade
+Estado
+Número
+Complemento
+Situação: Ativo ou Inativo
+
+Outros
+
+Observações
+Veículo
+Placa
+UF da placa
+RNTRC, quando utilizado em documentos fiscais
+
+Funcionalidades
+
+Usar em vendas, compras, orçamentos e notas fiscais
+Cadastrar, editar e inativar transportadoras.
+Cadastros auxiliares
+Tipos de endereço
+Tipos de contato
+Canais de venda
+Centros de custo
+Situações personalizadas
+Formas de pagamento
+Categorias financeiras
+Categorias de produtos
+Marcas
+Unidades
+Vendedores
+Técnicos
+Grupos de usuários.
+2. Produtos
+Dados gerais
+Tipo: Produto, insumo ou serviço, conforme configuração
+Nome do produto
+Código interno ou SKU
+Código de barras EAN/GTIN
+Categoria
+Unidade: UN, CX, KG etc.
+Unidade de conversão
+Marca
+Descrição
+NCM
+Origem da mercadoria
+Situação: Ativo ou Inativo
+Permitir venda separadamente
+Disponível no PDV
+Percentual de comissão
+Detalhes físicos
+Peso
+Largura
+Altura
+Comprimento
+Campos extras
+Descrição complementar
+Valores
+Valor de custo
+Margem de lucro
+Valor de venda
+Valor promocional
+Tabelas de preço
+Comissão
+Atualização de preço por percentual
+Ajuste de valores em massa
+Estoque
+Quantidade por loja
+Estoque mínimo
+Estoque por variação
+Entrada e saída
+Movimentação
+Disponibilidade por loja
+Controle em metro quadrado
+Controle por unidade, caixa ou quilo
+Fotos e anexos
+Foto principal
+Imagens do produto
+Limite indicado de até 5 MB por arquivo
+Dados fiscais
+NCM
+CEST
+CFOP de compra
+CFOP de venda
+CST ou CSOSN do ICMS
+IPI
+PIS
+COFINS
+Origem tributária
+Dados para NF-e e NFC-e
+Produto composto
+Produtos componentes
+Quantidade de cada componente
+Atualizar custo do produto composto
+Custos adicionais
+Calcular valor de venda
+Baixar estoque dos componentes
+Fornecedores e lojas
+Fornecedor principal
+Custo por fornecedor
+Condições
+Lojas em que o produto ficará disponível.
+Grades e variações
+
+Cadastro da grade
+
+Nome da grade
+Lista de variações
+Exemplo: tamanho, cor, modelo
+
+No produto
+
+Possui variações: Sim ou Não
+Variação
+Código de barras
+Gerar código de barras
+Quantidade em estoque
+Valor de venda específico
+Custo específico
+
+Funcionalidades gerais de produtos
+
+Importar produtos por planilha
+Importar produtos pela NF-e
+Gerar etiquetas
+Excluir produtos em massa
+Vincular fornecedores
+Converter unidades
+Controlar variações
+Atualizar preços em massa
+Filtrar por loja
+Cadastrar produtos compostos.
+3. Serviços
+Dados gerais
+Nome do serviço
+Código interno
+Valor de venda
+Valor de custo
+Percentual de comissão
+Descrição
+Situação
+Foto
+Dados fiscais
+Atividade do serviço
+Código do serviço
+Código tributário
+CNAE
+Alíquota de ISS
+COFINS
+PIS
+CSLL
+IR
+INSS
+Serviço relacionado à construção civil
+Deduções e descontos tributários
+Relacionamentos
+Fornecedores
+Lojas em que o serviço ficará disponível
+Funcionalidades
+Usar em vendas
+Usar em orçamentos
+Usar em ordens de serviço
+Usar em contratos
+Emitir NFS-e
+Controlar custo e comissão.
+4. Orçamentos de produtos
+Dados gerais
+Número do orçamento
+Cliente
+Cadastrar novo cliente
+Vendedor ou responsável
+Data
+Previsão de entrega
+Aos cuidados de
+Canal de venda
+Centro de custo
+Situação do orçamento
+Validade
+Produtos
+Produto
+Detalhes
+Quantidade
+Tipo de valor de venda
+Valor unitário
+Desconto em reais
+Desconto em percentual
+Subtotal
+Adicionar produto
+Serviços
+Serviço
+Quantidade
+Valor
+Desconto
+Subtotal
+Transporte
+Valor do frete
+Transportadora
+Endereço de entrega
+Utilizar endereço de entrega
+CEP
+Logradouro
+Número
+Complemento
+Bairro
+Cidade
+Estado
+Totais
+Exibir total na impressão
+Total de produtos
+Total de serviços
+Desconto em reais
+Desconto percentual
+Frete
+Total final
+Pagamento
+À vista ou parcelado
+Forma de pagamento
+Quantidade de parcelas
+Intervalo entre parcelas
+Data da primeira parcela
+Gerar condições de pagamento
+Outros
+Anexos
+Observações impressas
+Observações internas
+Funcionalidades
+Enviar por WhatsApp
+Enviar por e-mail
+Imprimir
+Inserir imagens na impressão
+Alterar situação
+Personalizar situações
+Gerar uma venda a partir do orçamento.
+5. Orçamentos de serviços
+Dados gerais
+Número
+Cliente
+Vendedor ou responsável
+Data
+Previsão de entrega
+Aos cuidados de
+Validade
+Canal de venda
+Centro de custo
+Introdução ou apresentação
+Serviços e produtos
+Serviço
+Quantidade
+Valor
+Desconto
+Subtotal
+Produtos adicionais
+Materiais
+Outros campos
+Transporte
+Frete
+Endereço de entrega
+Descontos
+Total
+Anexos
+Observações
+Observações internas
+Funcionalidades
+Imprimir
+Enviar ao cliente
+Alterar situação
+Gerar venda
+Gerar ordem de serviço.
+6. Ordens de Serviço
+Dados gerais
+Número da OS
+Cliente
+Situação
+Data e hora de entrada
+Data e hora de saída
+Canal de venda
+Centro de custo
+Responsáveis
+Vendedor
+Técnico
+Equipamento
+Equipamento
+Marca
+Modelo
+Número de série
+Condições do equipamento
+Defeitos relatados
+Acessórios
+Solução aplicada
+Laudo
+Termos de garantia
+Adicionar outro equipamento
+Produtos e peças
+Produto ou peça
+Quantidade
+Valor
+Desconto
+Subtotal
+Serviços e mão de obra
+Serviço
+Quantidade
+Valor
+Desconto
+Subtotal
+Totais
+Exibir total na impressão
+Total de mão de obra
+Total de peças
+Frete
+Outros valores
+Desconto
+Total final
+Entrega
+CEP
+Logradouro
+Número
+Complemento
+Bairro
+Cidade
+Estado
+Pagamento
+À vista ou parcelado
+Data de vencimento
+Valor da parcela
+Forma de pagamento
+Plano de contas
+Outros
+Anexos de até 5 MB
+Observações
+Observações internas
+Ações
+Visualizar
+Editar
+Excluir
+Alterar situação
+Imprimir em A4
+Imprimir cupom
+Gerar etiquetas
+Enviar por WhatsApp
+Enviar por e-mail
+Gerar nota fiscal
+Incluir imagem na impressão.
+7. Vendas de produtos
+Dados gerais
+Número da venda
+Cliente
+Vendedor
+Data da venda
+Prazo de entrega
+Situação
+Canal de venda
+Centro de custo
+Produtos
+Produto
+Quantidade
+Valor unitário ou valor total
+Desconto em reais
+Desconto percentual
+Subtotal
+Serviços adicionais
+Serviço
+Quantidade
+Valor
+Transporte e entrega
+Transportadora
+Frete
+CEP
+Endereço
+Número
+Complemento
+Bairro
+Cidade
+Estado
+Totais
+Total dos produtos
+Total dos serviços
+Frete
+Acréscimos
+Descontos
+Total final
+Pagamento
+À vista ou parcelado
+Valor total ou parcial
+Vencimento
+Forma de pagamento
+Quantidade de parcelas
+Intervalo entre parcelas
+Data da primeira parcela
+Plano de contas
+Outros
+Anexos
+Observações impressas
+Observações internas
+Ações
+Visualizar
+Editar
+Excluir
+Copiar venda
+Imprimir em A4
+Imprimir cupom
+Alterar situação
+Enviar por e-mail
+Enviar por WhatsApp
+Gerar NF-e
+Gerar NFC-e
+Criar link de pagamento
+Enviar para assinatura digital
+Registrar troca ou devolução
+Separar produtos
+Consultar financeiro.
+8. Vendas de serviços
+Dados gerais
+Número
+Cliente
+Vendedor ou responsável
+Data
+Prazo de entrega
+Situação
+Canal de venda
+Centro de custo
+Serviços
+Serviço
+Cadastrar novo serviço
+Quantidade
+Valor
+Desconto
+Subtotal
+Produtos opcionais
+Produto
+Quantidade
+Valor
+Desconto
+Demais campos
+Transportadora
+Frete
+Endereço
+Totais
+Forma de pagamento
+Parcelas
+Vencimentos
+Anexos
+Observações
+Observações internas
+Ações
+Gerar link de pagamento
+Imprimir
+Gerar ordem de serviço
+Alterar situação
+Enviar ao cliente
+Gerar NF-e
+Gerar NFC-e
+Gerar NFS-e
+Enviar para assinatura
+Copiar venda.
+9. PDV e caixa
+Abertura de caixa
+Valor de abertura
+Gerar lançamento no financeiro
+Confirmar abertura
+Caixa individual por usuário
+Tela de venda
+Vendedor
+Cliente
+Opção “Ao consumidor”
+Pesquisa de produtos e serviços
+Código de barras
+Quantidade
+Valor unitário
+Desconto
+Adicionar produto
+Editar item
+Colocar venda em espera
+Cancelar venda
+Pagamento
+Uma forma de pagamento
+Várias formas de pagamento
+Pagamento parcial
+Quantidade de parcelas
+Troco
+Finalização
+Nova venda
+Recibo não fiscal
+NFC-e
+Cupom
+Impressão
+Reabertura ou controle do caixa
+Outras funções de vendas
+Agrupamento de vendas
+Controle de caixa
+Vendas por quilo
+Vendas por unidade
+Limite máximo de desconto
+Situações de venda
+Canais de venda
+Trocas e devoluções.
+10. Compras de produtos
+Dados gerais
+Fornecedor
+Data de emissão
+Situação
+Número da nota fiscal
+Centro de custo
+Carregar produtos
+Produtos
+Produto
+Quantidade
+Valor
+Desconto
+Adicionar produto
+Cadastrar novo produto
+Vincular produto importado
+Serviços opcionais
+Serviço
+Quantidade
+Valor
+Transporte
+Frete
+Adicionar frete ao total
+Transportadora
+Totais
+Total de produtos
+Total de serviços
+Impostos
+Descontos
+Frete
+Total da compra
+Pagamento
+À vista ou parcelado
+Forma de pagamento
+Quantidade de parcelas
+Intervalo
+Primeira data de vencimento
+Plano de contas
+Gerar financeiro
+Outros
+Anexos
+Observações
+Importar XML por arquivo
+Importar XML da SEFAZ
+Ações
+Visualizar
+Editar
+Excluir
+Alterar situação
+Compartilhar
+Imprimir em A4
+Consultar nota fiscal
+Consultar financeiro
+Assinatura digital.
+11. Compras de serviços
+Fornecedor
+Data de emissão
+Situação
+Centro de custo
+Número da nota
+Serviço
+Quantidade
+Valor
+Desconto
+Produtos opcionais
+Frete
+Transportadora
+Impostos
+Total
+Forma de pagamento
+Parcelamento
+Anexos
+Observações
+Observações internas
+Visualizar, editar, excluir, imprimir, compartilhar e consultar financeiro.
+12. Estoque
+Ajuste de estoque
+Tipo de movimento: Entrada ou Saída
+Produto
+Quantidade
+Unidade
+Valor de custo
+Frete
+Adicionar outro produto
+Observação
+Transferência entre lojas
+Loja de origem
+Loja de destino
+Produto
+Quantidade
+Adicionar item
+Observações
+Histórico
+Período
+Produto
+Loja
+Tipo de movimentação
+Entrada
+Saída
+Saldo
+Pesquisa avançada
+Outras funcionalidades
+Controle de estoque
+Histórico de movimentações
+Estoque por variação
+Estoque por loja
+Estoque mínimo
+Ajustes em massa
+Compras atualizando estoque
+Situações de compra que movimentam ou não o estoque.
+13. Cotações de compras
+Dados gerais
+Data
+Prazo para resposta
+Fornecedor
+E-mail do fornecedor
+Adicionar fornecedor
+Carregar produtos
+Produtos
+Produto
+Quantidade
+Adicionar produto
+Outros
+Observações para o fornecedor
+Observações internas
+Envio
+Fornecedor
+E-mail
+E-mail para resposta
+Assunto
+Mensagem
+Link automático para a cotação
+Funcionalidades
+Solicitar preço a vários fornecedores
+Receber respostas
+Comparar condições
+Gerar uma compra a partir da cotação.
+14. Financeiro
+Contas a receber
+Cliente ou entidade
+Descrição
+Valor
+Data de vencimento
+Forma de recebimento
+Categoria financeira
+Plano de contas
+Centro de custo
+Situação
+Conta bancária
+Observações
+Anexos
+
+Ações
+
+Abrir lançamento
+Editar
+Confirmar recebimento
+Confirmar parcialmente
+Gerar recibo
+Filtrar e localizar contas
+Importar contas a receber.
+Contas a pagar
+Fornecedor ou entidade
+Descrição
+Valor
+Data de vencimento
+Forma de pagamento
+Categoria financeira
+Plano de contas
+Centro de custo
+Conta bancária
+Situação
+Anexos
+Observações
+
+Ações
+
+Confirmar pagamento
+Confirmar parcialmente
+Importar contas a pagar
+Cadastrar por leitura de boleto, nota ou recibo
+Identificar automaticamente valor, vencimento e fornecedor em documentos compatíveis.
+Contas bancárias
+Nome da conta
+Saldo inicial
+Data do saldo inicial
+Tipo da conta
+Situação: Ativa ou Inativa
+Formas de pagamento vinculadas.
+Formas de pagamento
+
+Dados básicos
+
+Nome
+Conta bancária
+Disponível em contas a pagar
+Disponível em contas a receber
+Disponível em ambas
+Confirmar automaticamente
+Disponível no PDV
+
+Parcelamento
+
+Número máximo de parcelas
+Intervalo em dias
+Dias para a primeira parcela
+
+Taxas
+
+Tarifa bancária em reais
+Taxa da operadora em percentual
+Multa
+Juros de mora
+
+Outros
+
+Modalidade
+Gerar boleto.
+Outras funcionalidades financeiras
+Plano de contas
+Categorias e subcategorias
+Centros de custo
+Rateio
+Campos extras
+Situações financeiras
+Contas fixas ou recorrentes
+Transferências entre contas
+Extrato bancário
+Conciliação bancária
+Remessa bancária
+Retorno bancário
+Fluxo de caixa
+DRE
+Recibos
+Confirmação parcial
+Importação de lançamentos
+Filtros por período, cliente, fornecedor, conta e situação.
+15. Assinaturas e cobranças recorrentes
+Dados gerais
+Cliente
+Data
+Próximo vencimento
+Período para gerar a cobrança
+Frequência de repetição
+Repetir indefinidamente
+Repetir até determinada data
+Repetir determinada quantidade de vezes
+Data de término
+Quantidade de repetições
+Gerar venda automaticamente
+Forma de pagamento
+Enviar e-mail
+Vendedor
+Canal de venda
+Centro de custo
+Plano de contas
+Itens
+Serviço
+Quantidade
+Produtos, quando aplicável
+Totais
+Total automático
+Frete
+Desconto em reais
+Desconto percentual
+Total da assinatura
+Outros
+Anexos
+Observações
+Gerar próxima cobrança imediatamente
+Ações
+Visualizar
+Editar
+Excluir
+Pausar recorrência
+Gerar próxima fatura
+Visualizar vendas geradas
+Visualizar financeiro.
+16. Contratos de prestação de serviços
+
+Este é o formulário mais próximo do exemplo indicado pelo usuário.
+
+Dados gerais
+Número do contrato
+Cliente
+Data de início
+Data de término
+Vendedor
+Canal do contrato
+Situação
+Centro de custo
+Serviços
+Serviço
+Quantidade
+Valor unitário
+Valor total
+Produtos, quando incluídos
+Produto
+Quantidade
+Valor unitário
+Total
+Totalização
+Total dos serviços
+Total dos produtos
+Acréscimo em reais
+Desconto em reais
+Desconto percentual
+Total geral do contrato
+Faturamento
+Tipo de parcelamento: Dividir ou Multiplicar
+Forma de pagamento
+Intervalo entre parcelas
+Número de parcelas
+Data da primeira parcela
+Gerar parcelas
+Outros
+Anexos
+Observações
+Ações
+Visualizar
+Editar
+Excluir
+Imprimir contrato em PDF
+Alterar situação
+Renovar contrato
+Emitir nota fiscal de serviço
+Consultar ou gerar financeiro.
+Situações de contrato
+Nome da situação
+Gerar financeiro: Sim ou Não
+Cor
+Situação padrão
+Mostrar na listagem
+Bloquear acesso para determinados grupos de usuários.
+Situações de locação
+Nome
+Movimentar estoque
+Gerar financeiro
+Cor
+Situação padrão
+Exibir na listagem
+Restringir grupos de usuários.
+
+A documentação pública consultada apresenta o gerenciamento das situações de locação, mas não expõe integralmente todos os campos do formulário interno de um contrato de locação.
+
+17. Atendimentos
+Campos
+Cliente
+Atendente
+Tipo: Ativo ou Receptivo
+Visibilidade: Pública ou Restrita
+Assunto
+Forma de atendimento
+Situação
+Descrição
+Ações
+Visualizar
+Editar
+Excluir
+Imprimir em PDF
+Exportar
+Excluir em massa
+Alterar situação
+Restringir visualização
+Consultar histórico do cliente.
+18. Agenda
+Campos
+Compromisso
+Responsável
+Tipo de entidade
+Cliente, fornecedor, transportadora ou funcionário
+Descrição
+Data
+Horário
+Situação
+Local
+Funcionalidades
+Visualização mensal
+Visualização semanal
+Visualização diária
+Pesquisa avançada
+Situações personalizadas
+Sincronização com Google Agenda
+Vincular compromissos a clientes e responsáveis.
+19. Notas fiscais
+NF-e — dados gerais
+Número
+Série
+Natureza da operação
+Tipo: Entrada ou Saída
+Finalidade da emissão
+Forma de emissão
+Data e hora da emissão
+Data e hora de entrada ou saída
+Consumidor final
+Destino da operação
+Tipo de atendimento
+Nota fiscal referenciada
+Destinatário
+Cliente ou fornecedor
+Tipo de pessoa
+Nome ou razão social
+CPF, CNPJ ou documento estrangeiro
+Indicador de contribuinte do ICMS
+Inscrição estadual
+SUFRAMA
+Inscrição municipal
+Endereço
+Endereço de entrega ou retirada
+Produtos e impostos
+Produto
+Quantidade
+Tipo de preço
+Variação
+Valor
+NCM
+CFOP
+ICMS
+IPI
+PIS
+COFINS
+Informações de comércio exterior
+Transporte
+Modalidade do frete
+Transportadora
+CPF ou CNPJ
+Nome ou razão social
+Inscrição estadual
+Endereço
+Cidade
+Estado
+Placa do veículo
+UF da placa
+RNTRC
+Retenção de ICMS
+Volumes
+Quantidade
+Peso líquido
+Peso bruto
+Espécie
+Marca
+Numeração
+Pagamento
+Número
+Forma de pagamento
+Data de vencimento
+Valor
+Vários pagamentos
+Informações adicionais
+Totais
+Tributos
+Transparência fiscal
+Retenções
+Local de embarque
+Informações complementares
+Ações
+Emitir
+Consultar aprovação
+Cancelar
+Carta de correção
+Inutilizar numeração
+Baixar XML
+Importar XML
+Emitir nota de devolução.
+NFS-e
+Número do RPS
+Natureza da operação
+Município de incidência do ISSQN
+Data e hora da emissão
+Cliente
+Tipo de pessoa
+Razão social
+CNPJ ou CPF
+Inscrição municipal
+Endereço
+Contato
+Descrição do serviço
+Item da lista de serviços
+Atividade
+Valor dos serviços
+Base de cálculo
+Construção civil
+Código da obra
+Código ART
+Deduções
+ISS
+PIS
+COFINS
+CSLL
+IR
+INSS.
+NFC-e
+Número
+Série
+Natureza da operação
+Canal ou tipo de atendimento
+Forma de emissão
+Consumidor
+Produtos
+Quantidades
+Valores
+Descontos
+Tributos
+Formas de pagamento
+Token
+CSC
+Emissão, cancelamento e impressão do documento.
+20. Importação de dados
+Importar clientes por planilha
+Importar clientes por XML
+Importar fornecedores por planilha
+Importar produtos por planilha
+Importar produtos por NF-e
+Importar XML de compra por arquivo
+Buscar XML na SEFAZ
+Importar XML sem gerar lançamento financeiro
+Importar contas a pagar
+Importar contas a receber.
+21. Relatórios
+Categorias documentadas
+Cadastros
+Clientes
+Fornecedores
+Funcionários
+Produtos
+Serviços
+Vendas
+Ordens de serviço
+Estoque
+Comissões
+Financeiro
+Contratos
+Notas fiscais
+Atendimentos
+Agendamentos
+Logs
+Funções usuais
+Filtro por período
+Filtro por situação
+Filtro por vendedor
+Filtro por cliente
+Filtro por fornecedor
+Filtro por loja
+Filtro por produto
+Impressão
+Exportação, quando disponível
+Relatório genérico
+Relatórios específicos por funcionário, estoque, comissão e documento fiscal.
+22. Configurações da empresa
+Dados da empresa
+Tipo de pessoa: Jurídica, Física ou Estrangeira
+Nome fantasia
+Razão social
+CNPJ
+Inscrição estadual
+Inscrição municipal
+CNAE principal
+Regime tributário
+Regime especial de tributação
+Regime de substituição tributária
+E-mail
+Telefone
+Celular
+Site
+CEP
+Logradouro
+Número
+Complemento
+Bairro
+Cidade
+Logotipo
+
+O logotipo pode ser enviado em formatos como PNG, JPG ou GIF, com ferramenta de recorte e limite documentado de até 5 MB.
+
+Usuários e permissões
+
+Dados gerais
+
+Nome
+CPF
+RG
+Data de nascimento
+Sexo
+Grupo
+E-mail
+Senha
+Observações
+Situação: Ativo ou Inativo
+
+Restrições
+
+Percentual de comissão
+Desconto máximo permitido
+Horário de entrada
+Início e fim do almoço
+Horário de saída
+Dias permitidos
+Restrição por IP
+
+Outras abas
+
+Foto
+Telefone
+Celular
+Endereço
+Lojas permitidas
+
+Permissões
+
+Permissão por módulo
+Visualizar
+Cadastrar
+Editar
+Excluir
+Imprimir
+Emitir documentos
+Acessar lojas específicas
+Bloqueio por grupo.
+Outras configurações
+Multiempresas e multiloja
+Backup
+Exclusão de dados
+Grupos de usuários
+Visibilidade por loja
+Alertas por e-mail
+Modelos de e-mail
+Área do cliente
+Domínio personalizado
+Comissões
+Permissões do contador
+Casas decimais
+Aplicativo para desktop
+Loja ou usuário isolado.
+23. Área do Cliente
+Lista de clientes com acesso
+Cliente
+E-mail
+Forma de criação do acesso
+Convite por e-mail
+Cadastro manual
+Mensagem
+Senha
+Confirmação da senha
+Serviços disponíveis
+Nome do remetente
+E-mail de resposta
+Assunto do convite
+Mensagem do convite
+Domínio personalizado
+Consulta de atendimentos e documentos permitidos.
+24. Integrações e aplicativos
+
+A documentação pública apresenta integração ou aplicativos para:
+
+CRM e prospecção
+Pipedrive
+Mercado Livre
+Mercado Pago
+Shopee
+NuvemShop
+Loja Integrada
+Tray
+PagSeguro
+PagHiper
+Efí Bank
+Banco Inter
+Cora
+Iugu
+Stone
+SendGrid
+Assinatura digital
+Controle de produção
+Controle patrimonial
+Cobranças
+CT-e
+MDF-e
+Expedição
+Recursos Humanos e vagas
+Área do Cliente
+Loja Virtual
+API por token.
+25. Área da Contabilidade
+Dados da empresa
+Tipos de documentos
+Cadastro de empresas
+Departamento contábil
+Departamento fiscal
+Departamento administrativo
+Departamento pessoal
+Clientes
+Visão geral
+Permissões
+Exportação fiscal
+Exportação contábil
+Usuários
+Indicações
+Escritórios
+Plano de contas
+Mensagens
+Grupos
+Acesso de clientes
+Recibos
+Assinaturas
+Marca do escritório
+Convite ao contador
+Sintegra.
+26. Loja Virtual
+Administração
+Visão geral
+Página inicial
+Clientes
+Produtos
+Grupos de produtos
+Marcas
+Grades e variações
+Campos extras
+Vendas
+Financeiro
+Aparência
+Logotipo
+Banners
+Visual da loja
+CSS personalizado
+HTML personalizado
+Páginas extras
+Configurações
+Dados da loja
+Domínio
+Formas de pagamento
+Situações das vendas
+Modelos de e-mail
+Formas de envio
+Redirecionamentos
+Uploads
+Usuários
+Logs
+Marketing e integrações
+Ferramentas de marketing
+Integrações externas
+Configurações comerciais.
+Ações que aparecem repetidamente no sistema
+
+Em praticamente todos os módulos, conforme a permissão do usuário, aparecem ações como:
+
+Novo cadastro
+Salvar
+Salvar e continuar
+Visualizar
+Editar
+Excluir
+Copiar
+Renovar
+Pesquisar
+Pesquisa avançada
+Filtrar por período
+Alterar situação
+Selecionar vários registros
+Excluir em massa
+Exportar
+Imprimir A4
+Imprimir PDF
+Imprimir cupom
+Gerar etiqueta
+Enviar por e-mail
+Enviar por WhatsApp
+Anexar arquivos
+Criar financeiro
+Consultar financeiro
+Emitir nota fiscal
+Gerar link de pagamento
+Enviar para assinatura digital
+Consultar histórico ou movimentações.
