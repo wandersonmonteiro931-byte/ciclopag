@@ -1,0 +1,34 @@
+CICLOPAG V6 - CONFIGURACOES COMPLETAS
+
+ORDEM DE INSTALACAO
+1. Abra o Supabase SQL Editor.
+2. Execute PASSO_6_SUPABASE_CONFIGURACOES.sql inteiro.
+3. Extraia este pacote em uma pasta nova.
+4. Execute ENVIAR_CICLOPAG_GITHUB.bat.
+5. Aguarde o deploy da Cloudflare.
+6. Acesse https://ciclopag.pages.dev/app
+
+PAGINAS IMPLEMENTADAS
+- Configuracoes gerais com abas:
+  Dados gerais, Numeracoes/impressoes, Movimentacoes, Fiscal,
+  Notificacoes, SMTP e Dominio proprio.
+- Meu plano com Bronze, Prata, Ouro e Platina.
+- Dados da empresa.
+- Marca da empresa com upload de logotipo.
+- Empresas / Lojas com CRUD e Matriz protegida.
+- Certificado digital A1/A3 com arquivo privado.
+- Modelos de e-mails.
+- Avisos por e-mail para ate 5 destinatarios.
+
+SEGURANCA
+- Chaves secretas nao sao colocadas no frontend.
+- Senha SMTP nao e gravada em texto publico.
+- Senha do certificado nao e armazenada no frontend.
+- Arquivos sao salvos no bucket privado erp-anexos.
+- Todas as tabelas usam RLS e empresa_id.
+
+CLOUDFLARE
+Build: npm run build
+Saida: dist
+Diretorio raiz: vazio
+Branch: main

@@ -1,0 +1,29 @@
+CICLOPAG V7 - ATUALIZACAO COMPLETA ORGANIZADA
+
+CONTEUDO DO PACOTE
+- Projeto completo do CicloPag V7
+- Menu lateral com todas as secoes obrigatorias
+- Icones SVG padronizados
+- Submenus e sub-submenus completos
+- Modulos operacionais para as novas secoes
+- Arquivos SQL das versoes anteriores preservados
+- BAT para envio automatico ao GitHub
+- Verificacao de build
+
+COMO ATUALIZAR
+1. Extraia este ZIP em uma pasta nova.
+2. Abra a pasta extraida.
+3. Execute ENVIAR_CICLOPAG_GITHUB.bat.
+4. Aguarde a mensagem de sucesso.
+5. A Cloudflare iniciara o deploy automaticamente.
+
+CONFIGURACAO CLOUDFLARE
+Branch: main
+Build: npm run build
+Diretorio de saida: dist
+Diretorio raiz: vazio
+
+IMPORTANTE
+- Esta etapa nao exige SQL novo.
+- Nao envie arquivos .env com segredos.
+- O package-lock usa apenas o registro publico do npm.

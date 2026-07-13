@@ -124,7 +124,7 @@ git diff --cached --quiet
 if errorlevel 1 (
     for /f "delims=" %%D in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HH-mm-ss"') do set "DATA_HORA=%%D"
     echo [5/8] Criando commit local...
-    git commit -m "CicloPag V5 Permissoes e ERP Completo !DATA_HORA!"
+    git commit -m "CicloPag V6 Configuracoes Planos Lojas !DATA_HORA!"
     if errorlevel 1 goto :falha
 ) else (
     echo [5/8] Nenhuma alteracao local nova para commit.

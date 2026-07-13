@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import FirstAccessTour from '../components/FirstAccessTour'
 import OnboardingWizard from '../components/OnboardingWizard'
-import { erpMenu, pageTitles } from '../data/erpMenu'
+import { erpMenu, pageTitles, type MenuNode } from '../data/erpMenu'
 import { getModuleDefinition, parseOperationalPage } from '../data/erpCatalog'
 import { OperationalModuleV5 } from './OperationalModuleV5'
 import { AccessManagement, isAccessPage } from './AccessManagement'
+import { ConfigurationManagement, isConfigurationPage } from './ConfigurationManagement'
 import { createAccessControl, type AccessControl, type PermissionRow } from '../lib/permissions'
 import { supabase, supabaseConfigured } from '../lib/supabase'
+import ErpIcon from '../components/ErpIcon'
 
 type Empresa = {
   id: string
@@ -73,14 +75,14 @@ const emptyDashboardData: DashboardData = {
 }
 
 const applications = [
-  { label: 'Melhor Envio', icon: '▰' },
-  { label: 'Criador de site', icon: '◇' },
-  { label: 'Asaas', icon: 'A' },
-  { label: 'Recursos Humanos', icon: '♟' },
-  { label: 'Assinatura Digital', icon: '✎' },
-  { label: 'Agenda Pro', icon: '▦' },
-  { label: 'Indicadores', icon: '↗' },
-  { label: 'MDF-e', icon: '▤' },
+  { label: 'Melhor Envio', icon: 'vendas' },
+  { label: 'Criador de site', icon: 'marca-empresa' },
+  { label: 'Asaas', icon: 'financeiro' },
+  { label: 'Recursos Humanos', icon: 'usuarios' },
+  { label: 'Assinatura Digital', icon: 'certificado-digital' },
+  { label: 'Agenda Pro', icon: 'relatorios' },
+  { label: 'Indicadores', icon: 'fluxo-caixa' },
+  { label: 'MDF-e', icon: 'fiscal' },
 ]
 
 function slugify(value: string) {
@@ -669,6 +671,36 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  function canSeeNode(node: MenuNode): boolean {
+    if (!node.children?.length) return access.can(node.id, 'visualizar')
+    return node.children.some((child) => canSeeNode(child))
+  }
+
+  function nodeIsActive(node: MenuNode): boolean {
+    return activePage === node.id || Boolean(node.children?.some((child) => nodeIsActive(child)))
+  }
+
+  function renderMenuNode(node: MenuNode, level = 0) {
+    if (!canSeeNode(node)) return null
+    const expanded = expandedMenus.includes(node.id)
+    const active = nodeIsActive(node)
+    const hasChildren = Boolean(node.children?.length)
+
+    return (
+      <div className={`erp-menu-group level-${level} ${level === 0 && active ? 'active' : ''}`} key={node.id}>
+        <button
+          className={level === 0 ? 'erp-menu-heading' : `erp-submenu-button level-${level} ${activePage === node.id ? 'active' : ''}`}
+          onClick={() => hasChildren ? toggleMenu(node.id) : navigate(node.id)}
+          type="button"
+        >
+          <span className={`erp-menu-icon ${level > 0 ? 'submenu-icon' : ''}`}><ErpIcon name={node.icon} /></span>
+          <strong>{node.label}</strong>
+          {hasChildren && <i className="erp-menu-caret"><ErpIcon name={expanded ? 'arrow-down' : 'arrow-right'} /></i>}
+        </button>
+        {hasChildren && expanded && <div className={`erp-submenu erp-submenu-level-${level + 1}`}>{node.children?.map((child) => renderMenuNode(child, level + 1))}</div>}
+      </div>
+    )
+  }
 
   async function closeWelcome(startTour: boolean) {
     setWelcomeOpen(false)
@@ -702,9 +734,9 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
           <button className="menu-toggle" onClick={() => setSidebarOpen((current) => !current)} aria-label="Recolher menu" type="button">☰</button>
         </div>
         <div className="erp-topbar-actions">
-          <button title="Aplicativos" type="button">▦</button>
-          <button title="Assistente" type="button">✦</button>
-          <button title="Notificações" type="button">♟</button>
+          <button title="Aplicativos" type="button"><ErpIcon name="app-grid" className="topbar-icon" /></button>
+          <button title="Assistente" type="button"><ErpIcon name="sparkles" className="topbar-icon" /></button>
+          <button title="Notificações" type="button"><ErpIcon name="bell" className="topbar-icon" /></button>
           <button className="user-avatar" title={userName} type="button">{firstName.slice(0, 1).toUpperCase()}</button>
         </div>
       </header>
@@ -716,30 +748,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
         </div>
         <button className="company-selector" type="button"><strong>Matriz</strong><span>⌄</span></button>
         <nav className="erp-menu" aria-label="Menu principal">
-          {erpMenu.filter((item) => !item.children ? access.can(item.moduleId ?? item.id, 'visualizar') : item.children.some((child) => access.can(child.moduleId ?? child.id, 'visualizar'))).map((item) => {
-            const expanded = expandedMenus.includes(item.id)
-            const active = activePage === item.id || item.children?.some((child) => child.id === activePage)
-            return (
-              <div className={`erp-menu-group ${active ? 'active' : ''}`} key={item.id}>
-                <button
-                  className="erp-menu-heading"
-                  onClick={() => item.children ? toggleMenu(item.id) : navigate(item.id)}
-                  type="button"
-                >
-                  <span className="erp-menu-icon">{item.icon}</span>
-                  <strong>{item.label}</strong>
-                  {item.children && <i>{expanded ? '⌃' : '⌄'}</i>}
-                </button>
-                {item.children && expanded && (
-                  <div className="erp-submenu">
-                    {item.children.filter((child) => access.can(child.moduleId ?? child.id, 'visualizar')).map((child) => (
-                      <button className={activePage === child.id ? 'active' : ''} key={child.id} onClick={() => navigate(child.id)} type="button">{child.label}</button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
+          {erpMenu.map((item) => renderMenuNode(item))}
         </nav>
         <button className="sidebar-signout" onClick={() => void signOut()} type="button">Sair da conta</button>
       </aside>
@@ -757,7 +766,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
             <h1>{activePage === 'inicio' ? `${greeting()}, ${firstName}` : currentPage.title}</h1>
             {activePage !== 'inicio' && <p>{currentPage.section}</p>}
           </div>
-          <div className="breadcrumb"><button onClick={() => navigate('inicio')} type="button">⌂ Início</button>{activePage !== 'inicio' && <span>› {currentPage.title}</span>}</div>
+          <div className="breadcrumb"><button onClick={() => navigate('inicio')} type="button"><ErpIcon name="home" className="breadcrumb-icon" /> Início</button>{activePage !== 'inicio' && <span>› {currentPage.title}</span>}</div>
         </header>
 
         {error && <div className="erp-alert"><span>!</span><p>{error}</p><button onClick={() => setError('')} type="button">×</button></div>}
@@ -800,7 +809,7 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
             <section className="dashboard-widget apps-widget">
               <div className="widget-heading"><div><h3>Meus aplicativos</h3><p>Conecte recursos adicionais ao CicloPag.</p></div><button type="button">Ver todos</button></div>
               <div className="apps-grid">
-                {applications.map((application) => <button key={application.label} type="button"><span>{application.icon}</span><strong>{application.label}</strong></button>)}
+                {applications.map((application) => <button key={application.label} type="button"><span><ErpIcon name={application.icon} className="app-card-icon" /></span><strong>{application.label}</strong></button>)}
               </div>
             </section>
           </>
@@ -812,6 +821,16 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
               session={session}
               access={access}
               navigate={navigate}
+            />
+          ) : isConfigurationPage(activePage) ? (
+            <ConfigurationManagement
+              pageId={activePage}
+              companyId={workspace.empresa.id}
+              session={session}
+              userName={userName}
+              access={access}
+              navigate={navigate}
+              onCompanyChanged={onWorkspaceRefresh}
             />
           ) : (
             <OperationalModuleV5

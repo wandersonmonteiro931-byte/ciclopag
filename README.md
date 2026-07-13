@@ -1,27 +1,16 @@
-# CicloPag V5
+# CicloPag V6
 
-**O ciclo completo da sua empresa.**
+ERP SaaS multiempresa com onboarding, grupos de usuários, permissões, cadastros operacionais e configurações empresariais completas.
 
-ERP multiempresa em React + TypeScript + Vite, Supabase e Cloudflare Pages.
+## V6
 
-## V5
+- Configurações gerais em abas.
+- Impressões, XML, PDV, NF-e, NFC-e e NFS-e.
+- Notificações, SMTP e domínio personalizado.
+- Planos Bronze, Prata, Ouro e Platina.
+- Dados e marca da empresa.
+- Empresas e lojas.
+- Certificados digitais.
+- Modelos e avisos por e-mail.
 
-- Onboarding profissional e tour de primeiro acesso.
-- Interface ERP padronizada.
-- Cadastros, itens, orçamentos, vendas, PDV, O.S., estoque, compras, financeiro, contratos, agenda, fiscal, relatórios, Área do Cliente, integrações, contabilidade e loja virtual.
-- Formulários orientados por catálogo com abas, seções, itens dinâmicos, anexos e histórico.
-- Grupos de usuários, matriz de permissões e convites de acesso.
-- Menu, botões e RLS condicionados às permissões reais.
-
-## Implantação
-
-1. Execute `PASSO_5_SUPABASE_PERMISSOES_COMPLETO.sql` no Supabase.
-2. Execute `ENVIAR_CICLOPAG_GITHUB.bat`.
-3. Acesse `https://ciclopag.pages.dev/app`.
-
-## Build
-
-```bash
-npm ci
-npm run build
-```
+Execute `PASSO_6_SUPABASE_CONFIGURACOES.sql` antes de publicar esta versão.

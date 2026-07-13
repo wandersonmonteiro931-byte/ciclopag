@@ -1,0 +1,23 @@
+CICLOPAG V7 - MENU COMPLETO COM ÍCONES E SEÇÕES OBRIGATÓRIAS
+
+Status do build:
+- npm install: OK
+- npm run build: OK
+
+Principais ajustes desta versão:
+- Sidebar refeita com estrutura hierárquica completa.
+- Inclusão de todas as seções obrigatórias informadas pelo usuário.
+- Inclusão de submenus e sub-submenus (Opções auxiliares / Boletos bancários).
+- Ícones customizados em SVG para manter visual consistente.
+- Atualização dos títulos de página do menu.
+- Inclusão de definições operacionais genéricas para os novos módulos, evitando tela “Módulo em configuração”.
+
+Arquivos principais alterados:
+- src/data/erpMenu.ts
+- src/components/ErpIcon.tsx
+- src/pages/SystemPage.tsx
+- src/data/erpCatalog.ts
+- src/styles.css
+
+Observação:
+- Não foi necessário novo SQL para esta etapa.
