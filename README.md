@@ -1,40 +1,25 @@
-# CicloPag
+# CicloPag V2
 
 **O ciclo completo da sua empresa.**
 
-Base inicial do SaaS CicloPag, construída com React, TypeScript, Vite e Supabase, preparada para deploy no Cloudflare Pages.
+Versão inicial do SaaS multiempresa do CicloPag, construída com React, Vite, Cloudflare Pages e Supabase.
 
-## Executar localmente
+## Entregue nesta versão
 
-```bash
-npm install
-npm run dev
-```
+- Cadastro e login com Supabase Auth
+- Criação da primeira empresa
+- Separação segura por empresa com RLS
+- Usuários e papéis iniciais
+- Módulos ativáveis
+- Painel com indicadores
+- Cadastro e listagem de clientes
+- Auditoria automática
+- PWA e rotas compatíveis com Cloudflare Pages
 
-## Build de produção
+## Instalação
 
-```bash
-npm run build
-```
+1. Execute `PASSO_2_SUPABASE.sql` no SQL Editor do Supabase.
+2. Configure `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` na Cloudflare.
+3. Execute `ENVIAR_CICLOPAG_GITHUB.bat`.
 
-A saída será criada em `dist`.
-
-## Variáveis de ambiente
-
-Copie `.env.example` para `.env.local` e informe a chave pública do Supabase:
-
-```env
-VITE_SUPABASE_URL=https://zqmxewoevqupcsqjimxz.supabase.co
-VITE_SUPABASE_ANON_KEY=SUA_CHAVE_PUBLICA
-VITE_APP_NAME=CicloPag
-VITE_APP_ENV=development
-```
-
-Nunca coloque a chave `service_role` ou outros segredos em variáveis iniciadas por `VITE_`.
-
-## Cloudflare Pages
-
-- Branch de produção: `main`
-- Comando de build: `npm run build`
-- Diretório de saída: `dist`
-- Diretório raiz: vazio
+Consulte `GUIA_V2_SUPABASE.txt` para o passo a passo completo.

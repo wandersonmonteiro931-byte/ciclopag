@@ -1,5 +1,5 @@
 import { Link, Route, Routes } from 'react-router-dom'
-import { supabaseConfigured } from './lib/supabase'
+import SystemPage from './pages/SystemPage'
 
 type ModuleCard = {
   title: string
@@ -158,23 +158,6 @@ function LandingPage() {
         <p>O ciclo completo da sua empresa.</p>
         <small>© 2026 CicloPag. Plataforma em desenvolvimento.</small>
       </footer>
-    </div>
-  )
-}
-
-function SystemPage() {
-  return (
-    <div className="simple-page">
-      <Brand />
-      <div className="simple-card">
-        <span className="eyebrow">Painel CicloPag</span>
-        <h1>Área do sistema em construção</h1>
-        <p>A base do projeto já está publicada. O próximo passo será implementar autenticação, empresas, clientes e permissões.</p>
-        <div className={`config-status ${supabaseConfigured ? 'ready' : ''}`}>
-          <strong>Supabase:</strong> {supabaseConfigured ? 'configurado' : 'aguardando a chave pública nas variáveis da Cloudflare'}
-        </div>
-        <Link className="button" to="/">Voltar ao site</Link>
-      </div>
     </div>
   )
 }
