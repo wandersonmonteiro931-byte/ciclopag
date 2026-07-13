@@ -1,0 +1,12 @@
+{
+  "name": "CicloPag",
+  "short_name": "CicloPag",
+  "description": "O ciclo completo da sua empresa.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b3568",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

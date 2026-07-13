@@ -6,3 +6,9 @@ dist
 .DS_Store
 .vscode
 .idea
+node_modules/
+dist/
+.env
+.env.local
+.env.production
+.env.development
