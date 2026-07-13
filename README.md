@@ -13,3 +13,9 @@ Versão com autenticação, banco multiempresa, onboarding de primeiro acesso, t
 
 Produção: `https://ciclopag.pages.dev/`
 Sistema: `https://ciclopag.pages.dev/app`
+
+## Versão 0.4.0 — padrão operacional
+
+A V4 padroniza todas as seções do ERP com barra de ações, pesquisa, tabelas,
+formulários em painéis, abas e salvamento multiempresa no Supabase. Antes do
+deploy, execute `PASSO_4_SUPABASE_OPERACIONAL.sql`.

@@ -4,6 +4,8 @@ import type { Session } from '@supabase/supabase-js'
 import FirstAccessTour from '../components/FirstAccessTour'
 import OnboardingWizard from '../components/OnboardingWizard'
 import { erpMenu, pageTitles } from '../data/erpMenu'
+import { getOperationalPageInfo } from '../data/operationalPages'
+import { OperationalModule } from './OperationalModule'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 
 type Empresa = {
@@ -431,22 +433,6 @@ function CalendarCard() {
   )
 }
 
-function PlaceholderPage({ pageId }: { pageId: string }) {
-  const info = pageTitles[pageId] ?? { title: 'Módulo', section: 'CicloPag' }
-  return (
-    <section className="module-placeholder">
-      <div className="module-placeholder-icon">▦</div>
-      <span>{info.section}</span>
-      <h2>{info.title}</h2>
-      <p>A estrutura visual deste módulo já está preparada. As funções operacionais serão adicionadas nas próximas etapas sem alterar o padrão do painel.</p>
-      <div className="module-placeholder-actions">
-        <button type="button">Ver recursos planejados</button>
-        <button className="secondary" type="button">Voltar ao início</button>
-      </div>
-    </section>
-  )
-}
-
 function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Session; workspace: Workspace; onWorkspaceRefresh: () => Promise<void> }) {
   const client = supabase
   const [activePage, setActivePage] = useState('inicio')
@@ -459,13 +445,10 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
   const [preferences, setPreferences] = useState<Preferences | null>(null)
   const [welcomeOpen, setWelcomeOpen] = useState(false)
   const [tourActive, setTourActive] = useState(false)
-  const [clientModal, setClientModal] = useState(false)
-  const [newClient, setNewClient] = useState({ nome: '', email: '', telefone: '' })
-  const [savingClient, setSavingClient] = useState(false)
 
   const userName = String(session.user.user_metadata?.nome || session.user.email?.split('@')[0] || 'Usuário')
   const firstName = userName.trim().split(/\s+/)[0]
-  const currentPage = pageTitles[activePage] ?? { title: activePage, section: 'CicloPag' }
+  const currentPage = getOperationalPageInfo(activePage) ?? pageTitles[activePage] ?? { title: activePage.replace(/-/g, ' '), section: 'CicloPag' }
 
   async function loadPreferences() {
     if (!client) return
@@ -576,25 +559,6 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  async function saveClient(event: FormEvent) {
-    event.preventDefault()
-    if (!client) return
-    setSavingClient(true)
-    const { error: insertError } = await client.from('clientes').insert({
-      empresa_id: workspace.empresa.id,
-      nome: newClient.nome.trim(),
-      email: newClient.email.trim() || null,
-      telefone: newClient.telefone.trim() || null,
-    })
-    if (insertError) setError(friendlyError(insertError.message))
-    else {
-      setNewClient({ nome: '', email: '', telefone: '' })
-      setClientModal(false)
-      await loadDashboard()
-      navigate('clientes')
-    }
-    setSavingClient(false)
-  }
 
   async function closeWelcome(startTour: boolean) {
     setWelcomeOpen(false)
@@ -730,35 +694,15 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
               </div>
             </section>
           </>
-        ) : activePage === 'clientes' ? (
-          <section className="erp-content-panel">
-            <div className="content-panel-heading">
-              <div><span>Cadastros</span><h2>Clientes</h2><p>{data.clientCount} cliente(s) cadastrado(s)</p></div>
-              <button className="erp-primary-button" onClick={() => setClientModal(true)} type="button">＋ Novo cliente</button>
-            </div>
-            {loading ? <div className="erp-loading-row">Carregando clientes...</div> : data.clients.length === 0 ? (
-              <div className="erp-empty-state"><span>▤</span><h3>Nenhum cliente cadastrado</h3><p>Cadastre o primeiro cliente para começar a organizar sua base.</p><button onClick={() => setClientModal(true)} type="button">Cadastrar cliente</button></div>
-            ) : (
-              <div className="erp-table-wrap">
-                <table className="erp-table">
-                  <thead><tr><th>Cliente</th><th>Contato</th><th>Status</th><th>Cadastro</th><th /></tr></thead>
-                  <tbody>
-                    {data.clients.map((clientItem) => (
-                      <tr key={clientItem.id}>
-                        <td><div className="client-cell"><span>{clientItem.nome.slice(0, 1).toUpperCase()}</span><strong>{clientItem.nome}</strong></div></td>
-                        <td><small>{clientItem.email || clientItem.telefone || 'Não informado'}</small></td>
-                        <td><em>{clientItem.status}</em></td>
-                        <td><small>{new Intl.DateTimeFormat('pt-BR').format(new Date(clientItem.criado_em))}</small></td>
-                        <td><button type="button">•••</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </section>
         ) : (
-          <PlaceholderPage pageId={activePage} />
+          <OperationalModule
+            pageId={activePage}
+            companyId={workspace.empresa.id}
+            session={session}
+            userName={userName}
+            navigate={navigate}
+            onDataChanged={loadDashboard}
+          />
         )}
       </main>
 
@@ -784,17 +728,6 @@ function ErpDashboard({ session, workspace, onWorkspaceRefresh }: { session: Ses
 
       <FirstAccessTour active={tourActive} onClose={(completed) => void closeTour(completed)} />
 
-      {clientModal && (
-        <div className="modal-backdrop" onMouseDown={() => setClientModal(false)}>
-          <form className="modal-card erp-modal" onSubmit={saveClient} onMouseDown={(event) => event.stopPropagation()}>
-            <div className="modal-title"><div><span className="eyebrow">Novo cadastro</span><h2>Adicionar cliente</h2></div><button onClick={() => setClientModal(false)} type="button">×</button></div>
-            <label>Nome<input required value={newClient.nome} onChange={(event) => setNewClient({ ...newClient, nome: event.target.value })} placeholder="Nome completo" /></label>
-            <label>E-mail<input type="email" value={newClient.email} onChange={(event) => setNewClient({ ...newClient, email: event.target.value })} placeholder="cliente@email.com" /></label>
-            <label>Telefone<input value={newClient.telefone} onChange={(event) => setNewClient({ ...newClient, telefone: event.target.value })} placeholder="(62) 99999-9999" /></label>
-            <button className="erp-primary-button full" disabled={savingClient} type="submit">{savingClient ? 'Salvando...' : 'Salvar cliente'}</button>
-          </form>
-        </div>
-      )}
     </div>
   )
 }

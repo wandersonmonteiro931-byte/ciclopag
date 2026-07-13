@@ -1,0 +1,36 @@
+CICLOPAG V4 - PADRAO OPERACIONAL
+
+ORDEM DE INSTALACAO
+
+1. No Supabase, abra SQL Editor > New query.
+2. Execute PASSO_4_SUPABASE_OPERACIONAL.sql.
+3. Extraia este ZIP completo em uma nova pasta.
+4. Execute ENVIAR_CICLOPAG_GITHUB.bat.
+5. Aguarde o deploy da Cloudflare.
+6. Acesse https://ciclopag.pages.dev/app
+
+CONFIGURACAO DA CLOUDFLARE
+
+Branch: main
+Build: npm run build
+Diretorio de saida: dist
+Diretorio raiz: vazio
+
+O QUE ESTA VERSAO ENTREGA
+
+- Mesmo padrao visual em todas as secoes.
+- Barra de acoes, pesquisa, busca avancada e tabelas padronizadas.
+- Formularios completos para clientes, fornecedores, funcionarios,
+  transportadoras, produtos, servicos, orcamentos, vendas, compras,
+  contas a pagar e contratos.
+- Campos organizados em secoes e abas.
+- Linhas dinamicas de produtos e servicos com calculo de subtotal.
+- Salvamento real no Supabase com isolamento por empresa e RLS.
+- Exclusao de registros permitida somente para gestores.
+- Demais modulos usam a mesma pagina padrao e cadastro generico,
+  mantendo a identidade visual enquanto recebem funcoes especializadas.
+
+IMPORTANTE
+
+Nunca coloque service_role, sb_secret ou senha do banco no frontend.
+Use somente VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY na Cloudflare.
