@@ -1,0 +1,8 @@
+CICLOPAG - ENVIO CORRIGIDO
+
+1. Extraia este ZIP completo.
+2. Abra a pasta extraida.
+3. Execute ENVIAR_CICLOPAG_GITHUB.bat.
+
+Esta versao cria o commit local ANTES de executar git pull --rebase,
+evitando o erro: cannot pull with rebase: You have unstaged changes.

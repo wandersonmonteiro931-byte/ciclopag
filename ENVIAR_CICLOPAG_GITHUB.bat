@@ -4,7 +4,34 @@ title CicloPag - Enviar para GitHub
 
 set "REPO_URL=https://github.com/wandersonmonteiro931-byte/ciclopag.git"
 set "BRANCH=main"
-set "PROJECT_DIR="
+set "PROJECT_DIR=%~dp0"
+
+pushd "%PROJECT_DIR%" || (
+    echo [ERRO] Nao foi possivel abrir a pasta do projeto.
+    pause
+    exit /b 1
+)
+
+if not exist "package.json" (
+    echo.
+    echo [ERRO] package.json nao encontrado.
+    echo Extraia o ZIP completo antes de executar este BAT.
+    echo.
+    popd
+    pause
+    exit /b 1
+)
+
+where git >nul 2>&1
+if errorlevel 1 (
+    echo.
+    echo [ERRO] O Git nao esta instalado ou nao esta no PATH.
+    echo Instale em: https://git-scm.com/download/win
+    echo.
+    popd
+    pause
+    exit /b 1
+)
 
 echo.
 echo ============================================================
@@ -12,64 +39,27 @@ echo       CICLOPAG - ENVIO AUTOMATICO PARA O GITHUB
 echo ============================================================
 echo.
 
-rem Procura automaticamente a pasta do projeto.
-if exist "%~dp0package.json" set "PROJECT_DIR=%~dp0"
-if not defined PROJECT_DIR if exist "%~dp0CicloPag_Base_Inicial\package.json" set "PROJECT_DIR=%~dp0CicloPag_Base_Inicial"
-if not defined PROJECT_DIR if exist "%~dp0ciclopag\package.json" set "PROJECT_DIR=%~dp0ciclopag"
-
-if not defined PROJECT_DIR (
-    for /d %%D in ("%~dp0*") do (
-        if not defined PROJECT_DIR if exist "%%~fD\package.json" set "PROJECT_DIR=%%~fD"
-    )
+echo [1/8] Corrigindo configuracao publica do npm...
+> ".npmrc" (
+    echo registry=https://registry.npmjs.org/
+    echo audit=false
+    echo fund=false
+    echo progress=false
+    echo prefer-online=true
 )
 
-if not defined PROJECT_DIR (
-    echo Nao encontrei automaticamente a pasta que contem package.json.
-    echo.
-    set /p "PROJECT_DIR=Digite ou cole o caminho completo da pasta do CicloPag: "
-    set "PROJECT_DIR=!PROJECT_DIR:"=!"
+if exist "package-lock.json" (
+    powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+      "$p='package-lock.json';" ^
+      "$c=[IO.File]::ReadAllText($p);" ^
+      "$c=$c.Replace('https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/','https://registry.npmjs.org/');" ^
+      "$c=$c.Replace('https://packages.applied-caas-gateway.internal.api.openai.org/artifactory/api/npm/npm-public/','https://registry.npmjs.org/');" ^
+      "[IO.File]::WriteAllText($p,$c,(New-Object Text.UTF8Encoding($false)))"
+    if errorlevel 1 goto :falha
 )
 
-if not exist "!PROJECT_DIR!\package.json" (
-    echo.
-    echo [ERRO] O arquivo package.json nao foi encontrado em:
-    echo !PROJECT_DIR!
-    echo.
-    echo Coloque este BAT dentro da pasta do projeto ou mantenha-o
-    echo em Downloads ao lado da pasta CicloPag_Base_Inicial.
-    echo.
-    pause
-    exit /b 1
-)
-
-pushd "!PROJECT_DIR!" || (
-    echo [ERRO] Nao foi possivel abrir a pasta do projeto.
-    pause
-    exit /b 1
-)
-
-echo Pasta encontrada:
-echo !CD!
-echo.
-
-where git >nul 2>&1
-if errorlevel 1 (
-    echo [ERRO] O Git nao esta instalado ou nao esta no PATH.
-    echo Instale em: https://git-scm.com/download/win
-    echo.
-    pause
-    popd
-    exit /b 1
-)
-
-rem Corrige um nome incorreto que pode ter sido enviado antes.
-if exist "arquivo package-lock.json" (
-    if not exist "package-lock.json" ren "arquivo package-lock.json" "package-lock.json"
-)
-
-rem Garante protecao de arquivos locais e segredos.
 if not exist ".gitignore" (
-    >".gitignore" (
+    > ".gitignore" (
         echo node_modules/
         echo dist/
         echo .env
@@ -87,7 +77,7 @@ if not exist ".gitignore" (
     findstr /x /c:".env.development" ".gitignore" >nul 2>&1 || echo .env.development>>".gitignore"
 )
 
-rem Configura nome e email do Git se ainda nao estiverem definidos.
+echo [2/8] Verificando identificacao do Git...
 for /f "delims=" %%N in ('git config --global user.name 2^>nul') do set "GIT_NAME=%%N"
 for /f "delims=" %%E in ('git config --global user.email 2^>nul') do set "GIT_EMAIL=%%E"
 
@@ -101,8 +91,7 @@ if not defined GIT_EMAIL (
     git config --global user.email "!GIT_EMAIL!"
 )
 
-echo [1/6] Preparando repositorio...
-
+echo [3/8] Preparando repositorio Git...
 if not exist ".git" (
     git init
     if errorlevel 1 goto :falha
@@ -127,33 +116,29 @@ if not exist ".git" (
     git branch -M "%BRANCH%"
 )
 
-echo [2/6] Preparando alteracoes...
+echo [4/8] Preparando alteracoes locais...
 git add -A
-
 git reset -- ".env" ".env.local" ".env.production" ".env.development" >nul 2>&1
 
 git diff --cached --quiet
 if errorlevel 1 (
     for /f "delims=" %%D in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HH-mm-ss"') do set "DATA_HORA=%%D"
-    set "MENSAGEM=Atualizacao CicloPag !DATA_HORA!"
-    if not "%~1"=="" set "MENSAGEM=%~1"
-
-    echo [3/6] Criando commit...
-    git commit -m "!MENSAGEM!"
+    echo [5/8] Criando commit local...
+    git commit -m "Correcao CicloPag !DATA_HORA!"
     if errorlevel 1 goto :falha
 ) else (
-    echo [3/6] Nenhuma alteracao local nova para criar commit.
+    echo [5/8] Nenhuma alteracao local nova para commit.
 )
 
-echo [4/6] Sincronizando com o GitHub...
+echo [6/8] Sincronizando com o GitHub...
 git pull --rebase origin "%BRANCH%"
 if errorlevel 1 goto :conflito
 
-echo [5/6] Enviando para o GitHub...
+echo [7/8] Enviando para o GitHub...
 git push -u origin "%BRANCH%"
 if errorlevel 1 goto :falha
 
-echo [6/6] Concluido.
+echo [8/8] Concluido.
 echo.
 echo ============================================================
 echo [SUCESSO] CICLOPAG ENVIADO PARA O GITHUB.
@@ -167,13 +152,12 @@ exit /b 0
 :conflito
 echo.
 echo ============================================================
-echo [ERRO] O Git encontrou conflito ao sincronizar.
-echo Nenhum envio foi concluido.
+echo [ERRO] O Git encontrou conflito durante o rebase.
 echo.
-echo Execute estes comandos dentro da pasta do projeto:
+echo Execute dentro desta pasta:
 echo   git rebase --abort
 echo.
-echo Depois envie uma captura da tela para corrigirmos.
+echo Depois envie uma captura da tela.
 echo ============================================================
 echo.
 popd
@@ -183,7 +167,7 @@ exit /b 1
 :falha
 echo.
 echo ============================================================
-echo [ERRO] O envio nao foi concluido.
+echo [ERRO] O processo nao foi concluido.
 echo Confira a mensagem mostrada acima.
 echo ============================================================
 echo.
