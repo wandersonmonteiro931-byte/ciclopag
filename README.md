@@ -1,25 +1,15 @@
-# CicloPag V2
+# CicloPag V3
 
 **O ciclo completo da sua empresa.**
 
-Versão inicial do SaaS multiempresa do CicloPag, construída com React, Vite, Cloudflare Pages e Supabase.
+Versão com autenticação, banco multiempresa, onboarding de primeiro acesso, tour guiado, interface ERP e cadastro de clientes.
 
-## Entregue nesta versão
+## Implantação
 
-- Cadastro e login com Supabase Auth
-- Criação da primeira empresa
-- Separação segura por empresa com RLS
-- Usuários e papéis iniciais
-- Módulos ativáveis
-- Painel com indicadores
-- Cadastro e listagem de clientes
-- Auditoria automática
-- PWA e rotas compatíveis com Cloudflare Pages
+1. Execute `PASSO_2_SUPABASE.sql` apenas se a base V2 ainda não existir.
+2. Execute `PASSO_3_SUPABASE_ONBOARDING.sql`.
+3. Desative a confirmação obrigatória de e-mail no provedor de autenticação.
+4. Execute `ENVIAR_CICLOPAG_GITHUB.bat`.
 
-## Instalação
-
-1. Execute `PASSO_2_SUPABASE.sql` no SQL Editor do Supabase.
-2. Configure `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` na Cloudflare.
-3. Execute `ENVIAR_CICLOPAG_GITHUB.bat`.
-
-Consulte `GUIA_V2_SUPABASE.txt` para o passo a passo completo.
+Produção: `https://ciclopag.pages.dev/`
+Sistema: `https://ciclopag.pages.dev/app`

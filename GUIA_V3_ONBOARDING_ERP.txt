@@ -1,0 +1,44 @@
+CICLOPAG V3 - ONBOARDING E INTERFACE ERP
+
+ORDEM OBRIGATORIA
+
+1. SUPABASE
+   - Abra SQL Editor > New query.
+   - Execute PASSO_3_SUPABASE_ONBOARDING.sql.
+   - Resultado esperado: Success. No rows returned.
+
+2. AUTENTICACAO SEM CONFIRMACAO
+   - Authentication > Sign In / Providers > Email.
+   - Mantenha o provedor de e-mail ativado.
+   - Desative Confirm email.
+   - Salve.
+
+3. ENVIO
+   - Extraia o ZIP inteiro.
+   - Execute ENVIAR_CICLOPAG_GITHUB.bat.
+   - O deploy da Cloudflare sera iniciado pela branch main.
+
+4. TESTE
+   - Abra https://ciclopag.pages.dev/app
+   - Crie uma conta nova.
+   - Complete as quatro etapas do primeiro acesso.
+   - Escolha Continuar no modal de boas-vindas para iniciar o tour.
+
+O QUE FOI IMPLEMENTADO
+- Cadastro profissional com responsável, WhatsApp e empresa.
+- Entrada automática sem tela de confirmação de e-mail.
+- Onboarding em quatro etapas.
+- Seleção de segmento, módulos, ferramenta atual e canal de contato.
+- Ativação dos módulos escolhidos.
+- Interface ERP com menu lateral completo.
+- Dashboard financeiro no padrão enviado.
+- Modal de boas-vindas e tour guiado.
+- Persistência do onboarding e do tour no Supabase.
+- Cadastro real de clientes preservado.
+- Layout responsivo para celular e computador.
+
+CONFIGURACAO CLOUDFLARE
+Build: npm run build
+Saida: dist
+Diretorio raiz: vazio
+Branch: main
